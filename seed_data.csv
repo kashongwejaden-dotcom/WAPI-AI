@@ -1,0 +1,7 @@
+product_name,category,base_price,location,seller_id
+Maize flour,grain,2.50,Kinshasa,seller_001
+Rice,grain,3.20,Kinshasa,seller_002
+Cooking oil,oil,4.00,Kinshasa,seller_001
+Tomatoes,vegetable,1.80,Lubumbashi,seller_003
+Onions,vegetable,1.50,Lubumbashi,seller_003
+Sugar,grocery,2.90,Kinshasa,seller_004
