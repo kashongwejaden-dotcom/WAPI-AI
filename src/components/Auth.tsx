@@ -16,24 +16,38 @@ export function Auth({ onAuthSuccess }: { onAuthSuccess: () => void }) {
 
     let authError = null;
 
-    if (isLogin) {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-      authError = error;
-    } else {
-      const { error } = await supabase.auth.signUp({
-        email,
-        password,
-      });
-      authError = error;
+    if (!import.meta.env.VITE_SUPABASE_URL) {
+      setError("Please configure VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in your environment variables via the Settings menu.");
+      setLoading(false);
+      return;
     }
 
-    if (authError) {
-      setError(authError.message);
-    } else {
-      onAuthSuccess();
+    try {
+      if (isLogin) {
+        const { error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+        authError = error;
+      } else {
+        const { error } = await supabase.auth.signUp({
+          email,
+          password,
+        });
+        authError = error;
+      }
+
+      if (authError) {
+        if (authError.message === 'Failed to fetch') {
+          setError('Network error: Failed to connect to Supabase. Please verify your VITE_SUPABASE_URL is correct and the server is running.');
+        } else {
+          setError(authError.message);
+        }
+      } else {
+        onAuthSuccess();
+      }
+    } catch (err: any) {
+      setError(err.message || 'An unexpected error occurred');
     }
     setLoading(false);
   };
