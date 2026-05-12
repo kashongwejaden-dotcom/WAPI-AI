@@ -4,22 +4,23 @@ export interface CartItem {
   price: number;
   quantity: number;
   sellerId: string;
+  image?: string;
 }
 
 export const getCartItems = (): CartItem[] => {
-  const items = localStorage.getItem('cart_items');
+  const items = localStorage.getItem("cart_items");
   return items ? JSON.parse(items) : [];
 };
 
 export const saveCartItems = (items: CartItem[]) => {
-  localStorage.setItem('cart_items', JSON.stringify(items));
+  localStorage.setItem("cart_items", JSON.stringify(items));
   // Fire event so other tabs can update
-  window.dispatchEvent(new Event('cart_updated'));
+  window.dispatchEvent(new Event("cart_updated"));
 };
 
 export const addToCart = (item: CartItem) => {
   const items = getCartItems();
-  const existing = items.find(i => i.id === item.id);
+  const existing = items.find((i) => i.id === item.id);
   if (existing) {
     existing.quantity += item.quantity;
   } else {
@@ -30,13 +31,13 @@ export const addToCart = (item: CartItem) => {
 
 export const removeFromCart = (id: string) => {
   const items = getCartItems();
-  const newItems = items.filter(i => i.id !== id);
+  const newItems = items.filter((i) => i.id !== id);
   saveCartItems(newItems);
 };
 
 export const updateQuantityInCart = (id: string, delta: number) => {
   const items = getCartItems();
-  const item = items.find(i => i.id === id);
+  const item = items.find((i) => i.id === id);
   if (item) {
     item.quantity = Math.max(1, item.quantity + delta);
     saveCartItems(items);
@@ -44,6 +45,6 @@ export const updateQuantityInCart = (id: string, delta: number) => {
 };
 
 export const clearCart = () => {
-  localStorage.removeItem('cart_items');
-  window.dispatchEvent(new Event('cart_updated'));
+  localStorage.removeItem("cart_items");
+  window.dispatchEvent(new Event("cart_updated"));
 };

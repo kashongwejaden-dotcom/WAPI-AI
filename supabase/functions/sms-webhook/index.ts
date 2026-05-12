@@ -30,12 +30,12 @@ serve(async (req) => {
       throw new Error("Missing Supabase config");
     }
 
-    const searchApiUrl = \`\${supabaseUrl}/functions/v1/ai-search\`;
+    const searchApiUrl = `${supabaseUrl}/functions/v1/ai-search`;
     const searchResponse = await fetch(searchApiUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': \`Bearer \${anonKey}\`
+        'Authorization': `Bearer ${anonKey}`
       },
       body: JSON.stringify({
         query: body,
@@ -70,10 +70,10 @@ serve(async (req) => {
 
     // Return TwiML or plain text reply depending on provider
     // Twilio requires TwiML
-    const twimlResponse = \`<?xml version="1.0" encoding="UTF-8"?>
+    const twimlResponse = `<?xml version="1.0" encoding="UTF-8"?>
 <Response>
-    <Message>\${smsReply}</Message>
-</Response>\`;
+    <Message>${smsReply}</Message>
+</Response>`;
 
     return new Response(twimlResponse, {
       headers: { 'Content-Type': 'text/xml' },
@@ -82,7 +82,7 @@ serve(async (req) => {
     if (Deno.env.get('ENVIRONMENT') === 'development') {
       console.error("SMS Webhook error:", err);
     }
-    const twimlError = \`<?xml version="1.0" encoding="UTF-8"?><Response><Message>Service temporarily unavailable.</Message></Response>\`;
+    const twimlError = `<?xml version="1.0" encoding="UTF-8"?><Response><Message>Service temporarily unavailable.</Message></Response>`;
     return new Response(twimlError, { status: 200, headers: { 'Content-Type': 'text/xml' } });
   }
 })

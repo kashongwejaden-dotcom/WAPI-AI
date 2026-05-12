@@ -56,7 +56,7 @@ serve(async (req) => {
     let { data: products, error } = await supabase
       .from('products')
       .select('name, price, currency, unit, sellers(name, reliability_score)')
-      .ilike('name', \`%\${structuredData.product || query}%\`)
+      .ilike('name', `%${structuredData.product || query}%`)
       .limit(5);
 
     if (error) throw error;
@@ -69,7 +69,7 @@ serve(async (req) => {
     }).then();
 
     // 4. Summarize for SMS/Chat consumption
-    const summaryPrompt = \`Based on these WapiBei marketplace results: \${JSON.stringify(products)}. Write a short, friendly SMS-style summary to the user answering their query: "\${query}". Be very concise. No markdown.\`;
+    const summaryPrompt = `Based on these WapiBei marketplace results: ${JSON.stringify(products)}. Write a short, friendly SMS-style summary to the user answering their query: "${query}". Be very concise. No markdown.`;
     
     let summaryText = "Found matches.";
     try {
